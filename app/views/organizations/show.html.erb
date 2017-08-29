@@ -1,0 +1,56 @@
+<div class="col-5">
+   <a href="/organizations">Dashboard</a><br>
+   <a href="/logout/<%= current_user.id %>" data-method="delete">Logout</a>
+</div>
+
+<hr noshade>
+
+<div class="col-5">
+
+   <h3><%= @organization.name %></h3>
+   <p><strong>Description:</strong> <%= @organization.description %></p>
+
+   <% if @organization.users.include?(current_user) %>
+
+      <!-- Leave Organization Action -->
+      <form action="/leave/<%= @organization.id %>" method='post'>
+         <input type='hidden' name='_method' value='delete'>
+         <input type='hidden' name='authenticity_token' value="<%= form_authenticity_token %>">
+         <button class='btn btn-danger'>Leave Group</button>
+      </form>
+      <!-- End Leave Organization Action -->
+
+   <% else %>
+
+      <!-- Join Organization Action -->
+      <form action="/join/<%= @organization.id %>" method="post">
+         <input type='hidden' name='authenticity_token' value="<%= form_authenticity_token %>">
+         <button class='btn btn-primary' type='submit'>Join Group</button>
+      </form>
+      <!-- End Join Organization Action -->
+
+   <% end %>
+
+</div>
+
+<hr>
+
+<div class="col-5">
+
+   <% if @organization.user==current_user %>
+      <h3>Created By: YOU!</h3>
+   <% else %>
+      <h3>Created By: <%= @organization.user.first_name.titleize %> <%= @organization.user.last_name.titleize %> </h3>
+   <% end %>
+
+   <hr>
+
+   <h3>Members:</h3>
+   <% @organization.users.each do |user| %>
+      <ul>
+         <li><%= user.first_name.titleize %> <%= user.last_name.titleize %> </li>
+      </ul>
+   <% end %>
+
+</div>
+<hr noshade>
